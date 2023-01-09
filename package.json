@@ -1,0 +1,20 @@
+{
+  "name": "p5_v1",
+  "version": "1.0.0",
+  "description": "OpenClassrooms - Exercice 5",
+  "main": "index.js",
+  "scripts": {
+    "prefix": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DjStrife7/P5_V1.git"
+  },
+  "author": "DjStrife7",
+  "license": "ISC",
+  "browserlist": "last 4 versions",
+  "bugs": {
+    "url": "https://github.com/DjStrife7/P5_V1/issues"
+  },
+  "homepage": "https://github.com/DjStrife7/P5_V1#readme"
+} 
