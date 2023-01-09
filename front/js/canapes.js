@@ -23,6 +23,7 @@ function generateProducts(tabCanapes) {
     linkElement.appendChild(infosElement);
 
     // Création du tableau de sélection des couleurs du canapé
+    /*
     function chooseColors(tabColors) {
       for (let i = 0; i < tabColors.length; i++) {
         const color = tabColors[i];
@@ -36,13 +37,16 @@ function generateProducts(tabCanapes) {
         colorFourElement.innerText = canape.colors[3];
       }
     };
+    */
 
     // Création des différentes balises qui composerons les détails du canapé
     const imageElement = document.createElement("img");
     imageElement.src = canape.imageUrl;
     imageElement.setAttribute("alt","${canape.altTxt}");
+    /*
     const refElement = document.createElement("p");
     refElement.innerText = canape._id;
+    */
     const nameElement = document.createElement("h3");
     nameElement.innerText = canape.name;
     const priceElement = document.createElement ("p");
@@ -50,8 +54,16 @@ function generateProducts(tabCanapes) {
     const descriptionElement = document.createElement("p");
     descriptionElement.innerText = canape.description;
 
+    // Rattachement de la balise "article" aux différentes sous sections
+    infosElement.appendChild(imageElement);
+    /*
+    infosElement.appendChild(refElement);
+    */
+    infosElement.appendChild(nameElement);
+    infosElement.appendChild(priceElement);
+    infosElement.appendChild(descriptionElement);
 
-    console.log(canape.colors[0]);
+    console.log();
   }
 };
 
