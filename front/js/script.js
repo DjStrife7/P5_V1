@@ -3,6 +3,7 @@ async function fetchProducts() {
   const reponse = await fetch("http://localhost:3000/api/products");
   const canapes = await reponse.json();
 
+  document.querySelector(".items").innerHTML = "";
   generateProducts(canapes);
 }
 
@@ -13,40 +14,28 @@ function generateProducts(tabCanapes) {
     
     // Récupération d'un modèle de canapé
     const canape = tabCanapes[i];
+
     // Récupération de l'élément du DOM qui accueillera les différents canapés
     const sectionFiches = document.querySelector(".items");
+
     // Création d’une balise "a" dédiée au lien vers la fiche du canapé
     const linkElement = document.createElement("a");
     sectionFiches.appendChild(linkElement);
+    linkElement.setAttribute("href", `./product.html?id=${canape._id}`);
+    linkElement.addEventListener("click", function () {
+      onclick = document.location.href = `./product.html?id=${canape._id}`;
+    });
+
     // Création d’une balise "article" qui contiendra toutes les informations du canapé
     const infosElement = document.createElement("article");
     linkElement.appendChild(infosElement);
 
-    // Création du tableau de sélection des couleurs du canapé
-    /*
-    function chooseColors(tabColors) {
-      for (let i = 0; i < tabColors.length; i++) {
-        const color = tabColors[i];
-        const colorOneElement = document.createElement("p");
-        colorOneElement.innerText = canape.colors[0];
-        const colorTwoElement = document.createElement("p");
-        colorTwoElement.innerText = canape.colors[1];
-        const colorThreeElement = document.createElement("p");
-        colorThreeElement.innerText = canape.colors[2] ?? "\u{1F6AB}" === '🚫';
-        const colorFourElement = document.createElement("p");
-        colorFourElement.innerText = canape.colors[3];
-      }
-    };
-    */
-
     // Création des différentes balises qui composerons les détails du canapé
+    const idElement = document.createElement('p');
+    idElement.innerText = canape._id;
     const imageElement = document.createElement("img");
     imageElement.src = canape.imageUrl;
     imageElement.setAttribute("alt","${canape.altTxt}");
-    /*
-    const refElement = document.createElement("p");
-    refElement.innerText = canape._id;
-    */
     const nameElement = document.createElement("h3");
     nameElement.innerText = canape.name;
     const priceElement = document.createElement ("p");
@@ -56,14 +45,8 @@ function generateProducts(tabCanapes) {
 
     // Rattachement de la balise "article" aux différentes sous sections
     infosElement.appendChild(imageElement);
-    /*
-    infosElement.appendChild(refElement);
-    */
     infosElement.appendChild(nameElement);
     infosElement.appendChild(priceElement);
     infosElement.appendChild(descriptionElement);
-
-    console.log();
   }
 };
-
