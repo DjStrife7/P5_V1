@@ -1,11 +1,17 @@
-// Import des fonctions présentent dans script.js
-import { fetchProducts, generateProducts } from "./script";
+//Récupération de la chaîne de requete dans l'url
+const queryStringUrlId = new URL(document.URL);
+const productId = queryStringUrlId.searchParams.get("id");
 
-// Récupération des informations dans l'url
-const urlProduct = `./product.html?id=${canape._id}`;
-const url = new URL(urlProduct);
-const searchParams = new URLSearchParams(url.search);
+console.log(productId);
 
-if(searchParams.has('id')) {
-  const urlId = searchParams.get('id');
+// Récupération du canapé depuis l'API
+async function fetchOneProduct() {
+  const reponse = await fetch(`http://localhost:3000/api/products/` + productId);
+  const canape = await reponse.json();
+
+  /*document.querySelector(".item").innerHTML = "";*/
 }
+
+fetchOneProduct();
+
+

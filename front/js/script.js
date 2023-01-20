@@ -1,5 +1,5 @@
 // Récupération des canapés depuis l'API
-export async function fetchProducts() {
+async function fetchProducts() {
   const reponse = await fetch("http://localhost:3000/api/products");
   const canapes = await reponse.json();
 
@@ -9,7 +9,7 @@ export async function fetchProducts() {
 
 fetchProducts();
 
-export function generateProducts(tabCanapes) {
+function generateProducts(tabCanapes) {
   for (let i = 0; i < tabCanapes.length; i++) {
     
     // Récupération d'un modèle de canapé
@@ -37,7 +37,7 @@ export function generateProducts(tabCanapes) {
     imageElement.src = canape.imageUrl;
     imageElement.setAttribute("alt","${canape.altTxt}");
     const nameElement = document.createElement("h3");
-    nameElement.innerText = canape.name.slice(6);
+    nameElement.innerText = canape.name;
     const priceElement = document.createElement ("p");
     priceElement.innerText = `Prix: ${canape.price} €`;
     const descriptionElement = document.createElement("p");
@@ -48,5 +48,6 @@ export function generateProducts(tabCanapes) {
     infosElement.appendChild(nameElement);
     infosElement.appendChild(priceElement);
     infosElement.appendChild(descriptionElement);
+    
   }
 };
