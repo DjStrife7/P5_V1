@@ -31,7 +31,7 @@ function generateProducts(tabCanapes) {
     linkElement.appendChild(infosElement);
 
     // Création des différentes balises qui composerons les détails du canapé
-    const idElement = document.createElement('p');
+    const idElement = document.createElement("p");
     idElement.innerText = canape._id;
     const imageElement = document.createElement("img");
     imageElement.src = canape.imageUrl;
