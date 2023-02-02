@@ -5,7 +5,7 @@ const productId = queryStringUrlId.searchParams.get("id");
 
 // Récupération du canapé depuis l'API
 async function fetchOneProduct() {
-  const reponse = await fetch(`http://localhost:3000/api/products/` + productId);
+  const response = await fetch(`http://localhost:3000/api/products/` + productId);
   const canape = await reponse.json();
 
   // Récupération de l'élément du DOM qui accueillera l'image du canapé
