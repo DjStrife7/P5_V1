@@ -34,7 +34,47 @@ async function displayProductsInToCart() {
 
     canapeInfos = await getInfos(item.id);
 
+    // On envoi le nouveau contenu dans la page
+    document.getElementById(`cart__items`).innerHTML +=
+    `
+    <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+                <div class="cart__item__img">
+                  <img src="${canapeInfos.imageUrl}" alt="${canapeInfos.altTxt}">
+                </div>
+                <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                    <h2>${canapeInfos.name}</h2>
+                    <p>${item.color}</p>
+                    <p>${canapeInfos.price} €</p>
+                  </div>
+                  <div class="cart__item__content__settings">
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+                    </div>
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem">Supprimer</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+    `;
+
+    // Du coup, on pousse les infos dans le tableau canape
+    canape.push(item.id);
+
+    updateLocalStorage();
 
   }
-
 }
+
+displayProductsInToCart();
+
+
+// Création d'une fonction pour mettre à jour le localStorage
+function updateLocalStorage() {
+  localStorage.setItem("cart", JSON.stringify(cart))
+};
+
+
+// Création d'une fonction pour calculer le montant total du panier de l'utilisateur et lui retourner le résultat
