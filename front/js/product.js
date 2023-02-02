@@ -63,7 +63,6 @@ function addProductToCart(canape) {
     // Récupération des différentes informations saisie par l'utilisateur
     const id = productId;
     const name = document.getElementById('title').innerText;
-    const price = document.getElementById('price').innerText;
     const color = document.getElementById('colors').value;
     const quantity = document.getElementById('quantity').value;
 
@@ -75,7 +74,6 @@ function addProductToCart(canape) {
       const selectProduct = {
         id: id,
         name: name,
-        price: price,
         color: color,
         quantity: quantity
       }
@@ -86,19 +84,18 @@ function addProductToCart(canape) {
 
       //Vérification du contenu du panier dans le localStorage
       if (localStorageCart) {
-
         // On effectue une vérification de la présence d'un canapé via l'id et la couleur
         const modelCanape = localStorageCart.find(
-          (modelCanape) => modelCanape.id === selectProduct.id && modelCanape.color === selectProduct.color
+          (modelCanape) => selectProduct.id === modelCanape.id && selectProduct.color === modelCanape.color
         );
 
         // Si c'est true, on ajoute la nouvelle quantité à la précédente
         if (modelCanape) {
-          const newQuantityModelCanape = modelCanape.quantity + selectProduct.quantity;
+          const newQuantityModelCanape = Number(selectProduct.quantity) + Number(modelCanape.quantity);
 
           // Si on dépasse les 100 unités, on informe l'utilisateur d'un problème de stock
-          if (newQuantityModelCanape > 100) {
-            return alert(`Vous avez commandé plus de 100 exemplaires de ce modèle, de ce fait, les délais de livraison ne peuvent être honoré. Merci de sélectionner une quantité maximum de 100 par commande.`)
+          if (newQuantityModelCanape >= 100) {
+            return alert(`Vous avez commandé plus de 100 exemplaires de ce modèle. De ce fait, les délais de livraison ne peuvent être honoré. Merci de sélectionner une quantité maximum de 100 unités par commande.`)
           }
           // Si on ne dépasse pas les 100 on ajoute la quantité selcetionnée
           modelCanape.quantity = newQuantityModelCanape;
@@ -109,7 +106,7 @@ function addProductToCart(canape) {
         
         // Si le produit n'existe pas dans le localStorage, on l'ajoute
         localStorageCart.push(selectProduct);
-        localStorageCart.setItem("cart", JSON.stringify(localStorageCart));
+        localStorage.setItem("cart", JSON.stringify(localStorageCart));
       } else {
 
         // Sinon on ajoute un nouveau tableau dans lequel on met le nouveau canape 
