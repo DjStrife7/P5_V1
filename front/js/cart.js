@@ -1,5 +1,5 @@
 // On récupère dans un premier temps les éléments présent dans le localStorage
-const cart = JSON.parse(localStorage.getItem("cart"));
+let cart = JSON.parse(localStorage.getItem('cart'));
 
 console.log(cart);
 
@@ -28,14 +28,14 @@ async function displayProductsInToCart() {
 
   // On doit d'abord vérifier si nous avons des éléments dans le panier, si nous n'avons rien, on retourne un message comme quoi le panier est vide sinon on affiche ce qu'il y a dans le localStorage
   if (cart === null || cart.length === 0 || cart === undefined) {
-    document.querySelector("h1").textContent = `Votre panier ne contient aucun article`;
+    document.querySelector('h1').textContent = `Votre panier ne contient aucun article`;
   } else for (let i = 0; i < cart.length; i++) {
     const item = cart[i];
 
     canapeInfos = await getInfos(item.id);
 
     // On envoi le nouveau contenu dans la page
-    document.getElementById(`cart__items`).innerHTML +=
+    document.getElementById('cart__items').innerHTML +=
     `
     <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
                 <div class="cart__item__img">
@@ -64,6 +64,7 @@ async function displayProductsInToCart() {
     canape.push(item.id);
 
     updateLocalStorage();
+    removeCanape();
 
   }
 }
@@ -73,8 +74,47 @@ displayProductsInToCart();
 
 // Création d'une fonction pour mettre à jour le localStorage
 function updateLocalStorage() {
-  localStorage.setItem("cart", JSON.stringify(cart))
+  localStorage.setItem('cart', JSON.stringify(cart))
 };
 
 
 // Création d'une fonction pour calculer le montant total du panier de l'utilisateur et lui retourner le résultat
+
+
+
+
+// Création de la fonction pour supprimer les produits du panier
+function removeCanape() {
+
+  // On récupère l'élément HTML via sa classe pour pouvoir le supprimer
+  const deleteCanape = document.getElementsByClassName('deleteItem');
+
+  // Pour chaque élément "Supprimer"
+  for (let i = 0; i < deleteCanape.length; i++) {
+
+    // >On ajoute un écouteur d'événement "click" à l'élément "Supprimer"
+    deleteCanape[i].addEventListener('click', (event) => {
+
+      // On empêche le rechargement de la page
+      event.preventDefault();
+
+      // On enregistre l'ID et la couleur du produit à supprimer
+      const deleteId = cart[i].id;
+      const deleteColor = cart[i].color;
+
+      // On filtre les produits à conserver dans le panier et supprime le produit cliqué
+      cart = cart.filter(
+        (element) => element.id !== deleteId || element.color !== deleteColor
+      );
+
+      // Ensuite, on met à jour le LocalStorage avec les produits restants
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // On affiche un message de confirmation de la suppression du produit pour informer l'utilisateur de son action
+      alert('Votre article a bien été retiré de votre panier !');
+
+      // Enfin, on actualise la page du panier
+      window.location.href = 'cart.html';
+    });
+  }
+}
