@@ -91,7 +91,7 @@ function addProductToCart(canape) {
 
         // Si c'est true, on ajoute la nouvelle quantité à la précédente
         if (modelCanape) {
-          const newQuantityModelCanape = Number(selectProduct.quantity) + Number(modelCanape.quantity);
+          const newQuantityModelCanape = parseInt(selectProduct.quantity) + parseInt(modelCanape.quantity);
 
           // Si on dépasse les 100 unités, on informe l'utilisateur d'un problème de stock
           if (newQuantityModelCanape >= 100) {

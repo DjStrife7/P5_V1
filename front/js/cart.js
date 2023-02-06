@@ -26,47 +26,61 @@ function getInfos(productId) {
 // Création de la partie affichage des produits et du résumé de la commande
 async function displayProductsInToCart() {
 
+  // On crée deux variable pour nous permettre de calculer le prix et la quantité du panier
+  let totalPrice = 0;
+  let totalQuantity = 0;
+
   // On doit d'abord vérifier si nous avons des éléments dans le panier, si nous n'avons rien, on retourne un message comme quoi le panier est vide sinon on affiche ce qu'il y a dans le localStorage
   if (cart === null || cart.length === 0 || cart === undefined) {
     document.querySelector('h1').textContent = `Votre panier ne contient aucun article`;
-  } else for (let i = 0; i < cart.length; i++) {
-    const item = cart[i];
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      const item = cart[i];
+  
+      canapeInfos = await getInfos(item.id);
+  
+      // Mise en place du calcul des quantité et du prix global du panier
+      totalPrice += canapeInfos.price * item.quantity;
+      totalQuantity += parseInt(item.quantity);
+  
+      // On envoi le nouveau contenu dans la page
+      document.getElementById('cart__items').innerHTML +=
+      `
+      <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+        <div class="cart__item__img">
+          <img src="${canapeInfos.imageUrl}" alt="${canapeInfos.altTxt}">
+        </div>
+        <div class="cart__item__content">
+          <div class="cart__item__content__description">
+            <h2>${canapeInfos.name}</h2>
+            <p>${item.color}</p>
+            <p>${canapeInfos.price} €</p>
+          </div>
+          <div class="cart__item__content__settings">
+            <div class="cart__item__content__settings__quantity">
+              <p>Qté : </p>
+              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+            </div>
+            <div class="cart__item__content__settings__delete">
+              <p class="deleteItem">Supprimer</p>
+            </div>
+          </div>
+        </div>
+      </article>
+      `;
+  
+      // Du coup, on pousse les infos dans le tableau canape
+      canape.push(item.id);
+  
+      updateLocalStorage();
+      removeCanape();
+      addCanape();
+    }
+  } 
 
-    canapeInfos = await getInfos(item.id);
-
-    // On envoi le nouveau contenu dans la page
-    document.getElementById('cart__items').innerHTML +=
-    `
-    <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
-                <div class="cart__item__img">
-                  <img src="${canapeInfos.imageUrl}" alt="${canapeInfos.altTxt}">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>${canapeInfos.name}</h2>
-                    <p>${item.color}</p>
-                    <p>${canapeInfos.price} €</p>
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem">Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-    `;
-
-    // Du coup, on pousse les infos dans le tableau canape
-    canape.push(item.id);
-
-    updateLocalStorage();
-    removeCanape();
-
-  }
+  // On affiche la quantité et le prix du panier sur la page HTML
+  document.getElementById('totalQuantity').innerText = totalQuantity;
+  document.getElementById('totalPrice').innerText = totalPrice;
 }
 
 displayProductsInToCart();
@@ -78,15 +92,56 @@ function updateLocalStorage() {
 };
 
 
-// Création d'une fonction pour calculer le montant total du panier de l'utilisateur et lui retourner le résultat
+// Création de la fonction pour ajouter des produits au panier
+function addCanape() {
 
+  // On récupère l'élément HTML via sa classe pour pouvoir ajouter les futurs canapés
+  const itemQuantity = document.getElementsByClassName('itemQuantity')
 
+  // Pour chaque élément "Ajouter"
+  for (let i = 0; i < itemQuantity.length; i++) {
+    itemQuantity[i].addEventListener('change', (event) => {
+      // On empêche le rechargement de la page
+      event.preventDefault();
+
+      let newItemQuantity = itemQuantity[i].value;
+      let newTotalQuantity = document.getElementById('totalQuantity');
+
+      const newLocalStorage = {
+        id: cart[i].id,
+        img: cart[i].img,
+        name: cart[i].name,
+        color: cart[i].color,
+        quantity: parseInt(newItemQuantity),
+      };
+
+      if (newItemQuantity > 100) {
+        alert(`Vous avez selectionné trop de produits`);
+        return;
+      };
+
+      if (newItemQuantity <= 0) {
+        alert(`Vous avez une quantité non invalide`);
+        return;
+      };
+
+      cart[i] = newLocalStorage;
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // On affiche un message de confirmation de la suppression du produit pour informer l'utilisateur de son action
+      alert('Votre article a bien été ajouté de votre panier !');
+
+      // Enfin, on actualise la page du panier
+      window.location.href = 'cart.html';
+    });
+  }
+}
 
 
 // Création de la fonction pour supprimer les produits du panier
 function removeCanape() {
 
-  // On récupère l'élément HTML via sa classe pour pouvoir le supprimer
+  // On récupère l'élément HTML via sa classe pour pouvoir supprimer les canapés
   const deleteCanape = document.getElementsByClassName('deleteItem');
 
   // Pour chaque élément "Supprimer"
