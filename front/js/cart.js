@@ -173,3 +173,65 @@ function removeCanape() {
     });
   }
 }
+
+
+/*----------  FORMULAIRE  ----------*/
+
+// On cible en premier lieu le bouton "Commander" du formulaire
+const orderButton = document.getElementById('order');
+
+// On crée une variable pour le remplissage du formulaire qui pourra nos retourner un message d'erreur si non conforme
+const validForm = {
+  firstname: {
+    element: document.getElementById('firstName'),
+    regex: /^[A-Za-z][A-Za-z\é\è\ê\ë\ï\œ\-\s]+$/,
+    errorMsg: `Prénom saisie invalide`
+  },
+  lastname: {
+    element: document.getElementById('lastName'),
+    regex: /^[A-Za-z][A-Za-z\é\è\ê\ë\ï\œ\-\s]+$/,
+    errorMsg: `Nom saisie invalide`
+  },
+  address: {
+    element: document.getElementById('address'),
+    regex: /^[a-zA-Z0-9.,-_ ]{5,50}[  ]{0,2}$/,
+    errorMsg: `Adresse saisie invalide`
+  },
+  city: {
+    element: document.getElementById('city'),
+    regex: /^[a-zA-Z][a-zA-Z\é\è\ê\ë\ï\œ\-\s]+$/,
+    errorMsg: `Ville saisie invalide`
+  },
+  email: {
+    element: document.getElementById('email'),
+    regex: /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/,
+    errorMsg: `Email saisie invalide`
+  }
+};
+
+const inputFirstName = document.getElementById('firstname');
+inputFirstName.addEventListener('change', () => checkInput(validForm.firstname));
+const inputLastName = document.getElementById('lastname');
+inputLastName.addEventListener('change', () => checkInput(validForm.lastname));
+const inputAddress = document.getElementById('address');
+inputAddress.addEventListener('change', () => checkInput(validForm.address));
+const inputCity = document.getElementById('city');
+inputCity.addEventListener('change', () => checkInput(validForm.city));
+const inputEmail = document.getElementById('email');
+inputEmail.addEventListener('change', () => checkInput(validForm.email));
+
+
+function checkInput(input) {
+  const inputElement = input.element;
+  const inputRegex = input.regex;
+  const returnErrorMsg = input.errorMsg;
+  const returnErrorDiv = input.element.nextElementSibling;
+  const regexIsValid = inputRegex.test(inputElement.value);
+
+  if (regexIsValid) {
+    returnErrorDiv.innerText = '';
+  } else {
+    returnErrorDiv.innerText = errorMsg;
+  }
+  return regexIsValid;
+}
