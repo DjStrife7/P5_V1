@@ -1,7 +1,7 @@
 // On récupère dans un premier temps les éléments présent dans le localStorage
 let cart = JSON.parse(localStorage.getItem('cart'));
 
-console.log(cart);
+/*console.log(cart);*/
 
 // Du coup, on crée un tableau afin de récupérer les informations des produits présent dans le loaclStorage
 const canape = [];
@@ -179,6 +179,70 @@ function removeCanape() {
 
 // On cible en premier lieu le bouton "Commander" du formulaire
 const orderButton = document.getElementById('order');
+orderButton.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  let contact = {
+    firstName: inputFirstName.value,
+    lastName: inputLastName.value,
+    address: inputAddress.value,
+    city: inputCity.value,
+    email: inputEmail.value
+  };
+
+  // Ici on va vérifier que le panier n'est pas vide et que le formulaire est bien rempli pour pouvoir finalisr la commande en la chargeant dans le localStorage
+  if (cart == null || cart.length == 0) {
+    alert(`Votre panier est vide.`)
+  }
+  if (
+    checkInput(validForm.firstname) == false &&
+    checkInput(validForm.lastname) == false &&
+    checkInput(validForm.address) == false &&
+    checkInput(validForm.city) == false &&
+    checkInput(validForm.email) == false
+  ) {
+    alert(`Le formulaire est incorrect, merci de vérifier vos informations.`)
+  }
+  if (
+    cart.length > 0 &&
+    checkInput(validForm.firstname) &&
+    checkInput(validForm.lastname) &&
+    checkInput(validForm.address) &&
+    checkInput(validForm.city) &&
+    checkInput(validForm.email)
+  ) {
+    // Si le formulaire est correctement rempli, on l'enregistre dans le localStorage
+    localStorage.setItem('contact', JSON.stringify(contact));
+    // Ensuite on appelle la fonction qui envoie les données au serveur
+    sendToServer();
+  }
+
+  function sendToServer() {
+    fetch(`http://localhost:3000/api/products/order`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contact,
+        products: canape,
+      }),
+    })
+    // On récupère la réponse de l'API orderId et on la stock
+      .then((reponse) => {
+        console.log(reponse);
+        return reponse.json();
+      })
+      .then((server) => {
+        const orderId = server.orderId;
+
+        // Enfin, si oderId n'est pas undefined, on redirige l'utilisateur vers la page de confirmation
+        if (orderId != undefined) {
+          location.href = `confirmation.html?id=` + orderId;
+        }
+      });
+  }
+});
 
 // On crée une variable pour le remplissage du formulaire qui pourra nos retourner un message d'erreur si non conforme
 const validForm = {
@@ -209,29 +273,42 @@ const validForm = {
   }
 };
 
-const inputFirstName = document.getElementById('firstname');
-inputFirstName.addEventListener('change', () => checkInput(validForm.firstname));
-const inputLastName = document.getElementById('lastname');
-inputLastName.addEventListener('change', () => checkInput(validForm.lastname));
+const inputFirstName = document.getElementById('firstName');
+if (inputFirstName) {
+  inputFirstName.addEventListener('change', () => checkInput(validForm.firstname))
+};
+
+const inputLastName = document.getElementById('lastName');
+if (inputLastName) {
+  inputLastName.addEventListener('change', () => checkInput(validForm.lastname))
+};
+
 const inputAddress = document.getElementById('address');
-inputAddress.addEventListener('change', () => checkInput(validForm.address));
+if (inputAddress) {
+  inputAddress.addEventListener('change', () => checkInput(validForm.address))
+};
+
 const inputCity = document.getElementById('city');
-inputCity.addEventListener('change', () => checkInput(validForm.city));
+if (inputCity) {
+  inputCity.addEventListener('change', () => checkInput(validForm.city))
+};
+
 const inputEmail = document.getElementById('email');
-inputEmail.addEventListener('change', () => checkInput(validForm.email));
+if (inputEmail) {
+  inputEmail.addEventListener('change', () => checkInput(validForm.email))
+};
 
 
 function checkInput(input) {
   const inputElement = input.element;
   const inputRegex = input.regex;
-  const returnErrorMsg = input.errorMsg;
   const returnErrorDiv = input.element.nextElementSibling;
   const regexIsValid = inputRegex.test(inputElement.value);
 
   if (regexIsValid) {
     returnErrorDiv.innerText = '';
   } else {
-    returnErrorDiv.innerText = errorMsg;
+    returnErrorDiv.innerText = input.errorMsg;
   }
   return regexIsValid;
-}
+};
