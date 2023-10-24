@@ -249,12 +249,12 @@ const validForm = {
   firstname: {
     element: document.getElementById('firstName'),
     regex: /^[A-Za-z][A-Za-z\é\è\ê\ë\ï\œ\-\s]+$/,
-    errorMsg: `Prénom saisie invalide`
+    errorMsg: `Prénom saisi invalide`
   },
   lastname: {
     element: document.getElementById('lastName'),
     regex: /^[A-Za-z][A-Za-z\é\è\ê\ë\ï\œ\-\s]+$/,
-    errorMsg: `Nom saisie invalide`
+    errorMsg: `Nom saisi invalide`
   },
   address: {
     element: document.getElementById('address'),
@@ -269,7 +269,7 @@ const validForm = {
   email: {
     element: document.getElementById('email'),
     regex: /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/,
-    errorMsg: `Email saisie invalide`
+    errorMsg: `Email saisi invalide`
   }
 };
 

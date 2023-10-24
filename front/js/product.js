@@ -5,7 +5,7 @@ const productId = queryStringUrlId.searchParams.get("id");
 
 // Récupération du canapé depuis l'API
 async function fetchOneProduct() {
-  const reponse = await fetch(`http://localhost:3000/api/products/` + productId);
+  const reponse = await fetch("http://localhost:3000/api/products/" + productId);
   const canape = await reponse.json();
 
   // Récupération de l'élément du DOM qui accueillera l'image du canapé
@@ -68,7 +68,7 @@ function addProductToCart(canape) {
 
     // Vérification des informations sélectionnées par l'utilisateur
     if (color === undefined || color === "" || quantity < 1 || quantity > 100 || quantity === undefined) {
-      alert(`Merci de sélectionner une couleur et une quantité valide pour finaliser votre commande`)
+      return
     } else {
       // On ajoute les valeurs du canapé choisit par l'utilisateur
       const selectProduct = {
@@ -92,12 +92,13 @@ function addProductToCart(canape) {
         // Si c'est true, on ajoute la nouvelle quantité à la précédente
         if (modelCanape) {
           const newQuantityModelCanape = parseInt(selectProduct.quantity) + parseInt(modelCanape.quantity);
+          window.location.href = 'cart.html';
 
           // Si on dépasse les 100 unités, on informe l'utilisateur d'un problème de stock
           if (newQuantityModelCanape >= 100) {
-            return alert(`Vous avez commandé plus de 100 exemplaires de ce modèle. De ce fait, les délais de livraison ne peuvent être honoré. Merci de sélectionner une quantité maximum de 100 unités par commande.`)
+            return ("Vous avez commandé plus de 100 exemplaires de ce modèle. De ce fait, les délais de livraison ne peuvent être honoré. Merci de sélectionner une quantité maximum de 100 unités par commande.")
           }
-          // Si on ne dépasse pas les 100 on ajoute la quantité selcetionnée
+          // Si on ne dépasse pas les 100 on ajoute la quantité selectionnée
           modelCanape.quantity = newQuantityModelCanape;
 
           localStorage.setItem("cart", JSON.stringify(localStorageCart));
@@ -114,10 +115,20 @@ function addProductToCart(canape) {
         newModelCanape.push(selectProduct);
         localStorage.setItem("cart", JSON.stringify(newModelCanape));
       }
-      document.getElementById('addToCart').textContent = `Votre selection a été ajouté au panier!`;
-      window.location.href = `cart.html`;
+      document.getElementById('addToCart').textContent = "Votre selection a été ajouté au panier!";
+      window.location.href = 'cart.html';
     }
   });
+}
+
+// Création d'un message d'erreur ci la demande remplie n'est pas valide afin d'informer l'utilisateur
+const modalContainer = document.querySelector(".modal-container");
+const modalTriggers = document.querySelectorAll(".modal-trigger");
+
+modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal))
+
+function toggleModal(){
+  modalContainer.classList.toggle('active')
 }
 
 addProductToCart();

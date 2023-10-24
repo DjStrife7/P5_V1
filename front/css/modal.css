@@ -1,0 +1,95 @@
+/***************/
+/*Fenetre Modal*/
+/***************/
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+.modal-container {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  transition: visibility 0.4s;
+}
+.modal-container.active {
+  visibility: visible;
+}
+
+
+.overlay {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.82);
+  transition: opacity 0.4s 0.2s ease-out;
+}
+
+.modal-container.active .overlay {
+  opacity: 1;
+  transition: overlay 0.4s ease-out;
+}
+
+.modal-container.active .modal {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s 0.2s ease-out, transform 0.4s 0.2s ease-out;
+}
+
+.modal-container.active body {
+  overflow: hidden;
+}
+
+.modal {
+  opacity: 0;
+  width: 95%;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 30px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% - 50px));
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.close-modal {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  background-color: rgb(255, 54, 94);
+  color: rgba(255, 255, 255);
+}
+
+#modal-title, #modal-text {
+  color: black;
+}
+
+#modal-title {
+  margin-bottom: 10px;
+  margin-top: 0;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+}
+
+#modal-text {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 5px;
+}

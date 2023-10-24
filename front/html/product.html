@@ -11,11 +11,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet" />
     <link href="../css/product.css" rel="stylesheet" />
+    <link href="../css/modal.css" rel="stylesheet" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body>
+    <div class="modal-container">
+      <div class="overlay modal-trigger"></div>
+      <div class="modal">
+        <button class="close-modal modal-trigger">X</button>
+        <h1 id="modal-title">Saisie incorrecte</h1>
+        <p id="modal-text"> <!-- Veuillez sélectionner une couleur et une quantité valide avant d'ajouter à votre panier. --></p>
+      </div>
+    </div>
+
     <header>
       <div class="limitedWidthBlockContainer informations">
         <div class="limitedWidthBlock">
@@ -78,7 +88,7 @@
               </div>
 
               <div class="item__content__addButton">
-                <button id="addToCart">Ajouter au panier</button>
+                <button id="addToCart" class="modal-btn modal-trigger">Ajouter au panier</button>
               </div>
 
             </div>
