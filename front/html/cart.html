@@ -21,8 +21,8 @@
       <div class="overlay modal-trigger"></div>
       <div class="modal">
         <button class="close-modal modal-trigger">X</button>
-        <h1 class="modal-title">Saisie incorrecte</h1>
-        <p class="modal-text">Veuillez vérifier les informations saisies.</p>
+        <h1 id="modalTitle"> <!-- Saisie incorrecte --></h1>
+        <p id="modalText"> <!-- Veuillez sélectionner une couleur et une quantité valide avant d'ajouter à votre panier. --></p>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
           </nav>
         </div>
       </div>
-      <img class="banniere" src="../images/banniere.png" alt="Baniere">
+      <img class="banniere" src="../images/banniere.png" alt="Banniere">
     </header>
     
     <main class="limitedWidthBlockContainer">
@@ -111,7 +111,7 @@
                   <p id="emailErrorMsg"></p>
                 </div>
                 <div class="cart__order__form__submit">
-                  <input type="submit" value="Commander !" id="order">
+                  <input type="submit" value="Commander !" id="order" class="modal-btn modal-trigger">
                 </div>
               </form>
             </div>

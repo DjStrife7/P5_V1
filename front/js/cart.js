@@ -1,7 +1,6 @@
 // On récupère dans un premier temps les éléments présent dans le localStorage
 let cart = JSON.parse(localStorage.getItem('cart'));
 
-/*console.log(cart);*/
 
 // Du coup, on crée un tableau afin de récupérer les informations des produits présent dans le loaclStorage
 const canape = [];
@@ -16,11 +15,32 @@ function getInfos(productId) {
     return infos.json();
   })
   .catch(error => {
-    error = `Une erreur est survenue lors du chargement de la page, merci d'essayer à nouveau.`;
+    error = "Une erreur est survenue lors du chargement de la page, merci d'essayer à nouveau.";
     alert(error);
   })
   return reponse;
 };
+
+// Création d'une fonction pour afficher la modale en cas d'erreur ou en cas d'information utilisateur
+// Elle permet de modifier le titre et la description de la modale en fonction du message d'erreur a afficher
+function showModal(title, description) {
+  document.querySelector('h1').textContent = title;
+  document.querySelector('p').textContent = description;
+
+  const modalContainer = document.querySelector(".modal-container");
+  modalContainer.classList.toggle('active')
+}
+
+// Création d'une fonction qui permet de fermer la modale
+function toggleModal() {
+  const modalContainer = document.querySelector(".modal-container");
+  modalContainer.classList.toggle('active');
+
+  console.log('toggleModal');
+}
+
+const modalTriggers = document.querySelectorAll(".modal-trigger");
+modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal));
 
 
 // Création de la partie affichage des produits et du résumé de la commande
@@ -32,7 +52,6 @@ async function displayProductsInToCart() {
 
   // On doit d'abord vérifier si nous avons des éléments dans le panier, si nous n'avons rien, on retourne un message comme quoi le panier est vide sinon on affiche ce qu'il y a dans le localStorage
   if (cart === null || cart.length === 0 || cart === undefined) {
-    document.querySelector('h1').textContent = `Votre panier ne contient aucun article`;
   } else {
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
@@ -59,10 +78,10 @@ async function displayProductsInToCart() {
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
               <p>Qté : </p>
-              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+              <input type="number" class="itemQuantity modal-btn modal-trigger" name="itemQuantity" min="1" max="100" value="${item.quantity}">
             </div>
             <div class="cart__item__content__settings__delete">
-              <p class="deleteItem">Supprimer</p>
+              <p class="deleteItem modal-btn modal-trigger">Supprimer</p>
             </div>
           </div>
         </div>
@@ -116,20 +135,21 @@ function addCanape() {
       };
 
       if (newItemQuantity > 100) {
-        alert(`Vous avez selectionné trop de produits`);
+        itemQuantity[i].getElementsByClassName('modal-container');
+        showModal("Quantité erronée", "Merci de sélectionner une quantité comprise entre 1 et 100 pour pouvoir passer commande.");
+        // console.log("Quantité saisie trop importante");
         return;
       };
 
       if (newItemQuantity <= 0) {
-        alert(`Vous avez une quantité non invalide`);
+        itemQuantity[i].getElementsByClassName('modal-container');
+        showModal("Quantité erronée", "Merci de sélectionner une quantité comprise entre 1 et 100 pour pouvoir passer commande.");
+        // console.log("Vous avez une quantité non invalide");
         return;
       };
 
       cart[i] = newLocalStorage;
       localStorage.setItem('cart', JSON.stringify(cart));
-
-      // On affiche un message de confirmation de la suppression du produit pour informer l'utilisateur de son action
-      alert('Votre article a bien été ajouté de votre panier !');
 
       // Enfin, on actualise la page du panier
       window.location.href = 'cart.html';
@@ -152,7 +172,7 @@ function removeCanape() {
 
       // On empêche le rechargement de la page
       event.preventDefault();
-
+      console.log(event);
       // On enregistre l'ID et la couleur du produit à supprimer
       const deleteId = cart[i].id;
       const deleteColor = cart[i].color;
@@ -166,10 +186,14 @@ function removeCanape() {
       localStorage.setItem('cart', JSON.stringify(cart));
 
       // On affiche un message de confirmation de la suppression du produit pour informer l'utilisateur de son action
-      alert('Votre article a bien été retiré de votre panier !');
+      deleteCanape[i].getElementsByClassName('modal-container');
+      showModal("Article supprimé", "Votre article a bien été supprimé de votre panier.");
+      // console.log("Article retiré de votre panier");
 
       // Enfin, on actualise la page du panier
-      window.location.href = 'cart.html';
+      setTimeout(() => {
+        window.location.href = 'cart.html';
+      }, 1500);
     });
   }
 }
@@ -191,9 +215,6 @@ orderButton.addEventListener('click', (event) => {
   };
 
   // Ici on va vérifier que le panier n'est pas vide et que le formulaire est bien rempli pour pouvoir finalisr la commande en la chargeant dans le localStorage
-  if (cart == null || cart.length == 0) {
-    alert(`Votre panier est vide.`)
-  }
   if (
     checkInput(validForm.firstname) == false &&
     checkInput(validForm.lastname) == false &&
@@ -201,10 +222,22 @@ orderButton.addEventListener('click', (event) => {
     checkInput(validForm.city) == false &&
     checkInput(validForm.email) == false
   ) {
-    alert(`Le formulaire est incorrect, merci de vérifier vos informations.`)
+    orderButton.getElementsByClassName('modal-container');
+    document.querySelector('h1').textContent = "Formulaire incomplet";
+    document.querySelector('p').textContent = "Merci de vérifier les informations saisies avant de passer commande.";
+    // orderButton.getElementsByClassName('modal-container');
+    // showModal("Formulaire incomplet", "Merci de vérifier les informations saisies avant de passer commande.");
+    console.log("Formulaire incomplet");
   }
-  if (
-    cart.length > 0 &&
+  if (cart == null || cart.length == 0) {
+    // orderButton.getElementsByClassName('modal-container');
+    // document.querySelector('h1').textContent = "Panier vide";
+    // document.querySelector('p').textContent = "Merci de sélectionner des articles avant de passer commande.";
+    orderButton.getElementsByClassName('modal-container');
+    showModal("Panier vide", "Merci de vérifier les articles selectionnés avant de passer commande.");
+    console.log("Panier vide");
+  }
+  if (cart.length > 0 &&
     checkInput(validForm.firstname) &&
     checkInput(validForm.lastname) &&
     checkInput(validForm.address) &&
@@ -298,7 +331,7 @@ if (inputEmail) {
   inputEmail.addEventListener('change', () => checkInput(validForm.email))
 };
 
-
+// Fonction qui permet de valider les éléments du formulaire et de retourner un message d'erreur si jamais les chmaps ne sont pas corrects
 function checkInput(input) {
   const inputElement = input.element;
   const inputRegex = input.regex;

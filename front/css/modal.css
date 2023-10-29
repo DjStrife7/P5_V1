@@ -51,7 +51,7 @@
   opacity: 0;
   width: 95%;
   min-width: 300px;
-  max-width: 500px;
+  max-width: 400px;
   padding: 30px;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
@@ -76,11 +76,11 @@
   color: rgba(255, 255, 255);
 }
 
-#modal-title, #modal-text {
+#modalTitle, #modalText {
   color: black;
 }
 
-#modal-title {
+#modalTitle {
   margin-bottom: 10px;
   margin-top: 0;
   font-size: 20px;
@@ -88,7 +88,7 @@
   text-align: left;
 }
 
-#modal-text {
+#modalText {
   font-size: 14px;
   line-height: 1.4;
   margin-bottom: 5px;

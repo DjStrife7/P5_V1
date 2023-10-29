@@ -3,6 +3,28 @@ const queryStringUrlId = new URL(document.URL);
 const productId = queryStringUrlId.searchParams.get("id");
 
 
+// Création d'une fonction pour afficher la modale en cas d'erreur ou en cas d'information utilisateur
+// Elle permet de modifier le titre et la description de la modale en fonction du message d'erreur a afficher
+function showModal(title, description) {
+  document.querySelector('h1').textContent = title;
+  document.querySelector('p').textContent = description;
+
+  const modalContainer = document.querySelector(".modal-container");
+  modalContainer.classList.toggle('active')
+}
+
+// Création d'une fonction qui permet de fermer la modale
+function toggleModal() {
+  const modalContainer = document.querySelector(".modal-container");
+  modalContainer.classList.toggle('active');
+
+  console.log('toggleModal');
+}
+
+const modalTriggers = document.querySelectorAll(".modal-trigger");
+modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal));
+
+
 // Récupération du canapé depuis l'API
 async function fetchOneProduct() {
   const reponse = await fetch("http://localhost:3000/api/products/" + productId);
@@ -68,7 +90,8 @@ function addProductToCart(canape) {
 
     // Vérification des informations sélectionnées par l'utilisateur
     if (color === undefined || color === "" || quantity < 1 || quantity > 100 || quantity === undefined) {
-      return
+      buttonAddToCart.getElementsByClassName('modal-container');
+      showModal("Valeurs saisies incorrectes", "Merci de saisir une couleur et/ou une quantité valide avant d'ajouter au panier.");
     } else {
       // On ajoute les valeurs du canapé choisit par l'utilisateur
       const selectProduct = {
@@ -116,19 +139,13 @@ function addProductToCart(canape) {
         localStorage.setItem("cart", JSON.stringify(newModelCanape));
       }
       document.getElementById('addToCart').textContent = "Votre selection a été ajouté au panier!";
-      window.location.href = 'cart.html';
+     
+      setTimeout(() => {
+        window.location.href = 'cart.html';
+      }, 1000);
     }
   });
 }
-
-// Création d'un message d'erreur ci la demande remplie n'est pas valide afin d'informer l'utilisateur
-const modalContainer = document.querySelector(".modal-container");
-const modalTriggers = document.querySelectorAll(".modal-trigger");
-
-modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal))
-
-function toggleModal(){
-  modalContainer.classList.toggle('active')
-}
+ 
 
 addProductToCart();
