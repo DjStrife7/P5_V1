@@ -225,17 +225,12 @@ orderButton.addEventListener('click', (event) => {
     orderButton.getElementsByClassName('modal-container');
     document.querySelector('h1').textContent = "Formulaire incomplet";
     document.querySelector('p').textContent = "Merci de vérifier les informations saisies avant de passer commande.";
-    // orderButton.getElementsByClassName('modal-container');
-    // showModal("Formulaire incomplet", "Merci de vérifier les informations saisies avant de passer commande.");
     console.log("Formulaire incomplet");
   }
   if (cart == null || cart.length == 0) {
-    // orderButton.getElementsByClassName('modal-container');
-    // document.querySelector('h1').textContent = "Panier vide";
-    // document.querySelector('p').textContent = "Merci de sélectionner des articles avant de passer commande.";
     orderButton.getElementsByClassName('modal-container');
-    showModal("Panier vide", "Merci de vérifier les articles selectionnés avant de passer commande.");
-    console.log("Panier vide");
+    document.querySelector('h1').textContent = "Panier vide";
+    document.querySelector('p').textContent = "Merci de sélectionner des articles avant de passer commande.";
   }
   if (cart.length > 0 &&
     checkInput(validForm.firstname) &&
